@@ -2,6 +2,7 @@ import { message } from 'antd';
 import CountDown from 'components/CountDown';
 import { ChangeEvent, useState } from 'react';
 import styles from './index.module.scss';
+import request from 'service/fetch';
 
 interface IProp {
   isShow: boolean;
@@ -23,6 +24,19 @@ const Login = ({ isShow, onClose }: IProp) => {
       message.warning('请输入手机号');
       return;
     }
+    request
+      .post('/api/user/sendVerifyCode', {
+        to: form?.phone,
+        templateId: 1,
+      })
+      .then((res) => {
+        console.log(res);
+        if (res?.code === 0) {
+          setIsShowVeriftyCode(true);
+        } else {
+          message.error(res?.msg || '未知错误');
+        }
+      });
   };
   const clickLogin = () => {};
   const handleOAuth = () => {};
