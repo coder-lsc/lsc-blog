@@ -3,11 +3,13 @@ import { encode } from 'js-base64';
 import md5 from 'md5';
 import { NextApiRequest, NextApiResponse } from 'next';
 import request from 'service/fetch';
+import { withIronSessionApiRoute } from 'iron-session/next';
+import { ironOptions } from 'config/index';
+import { ISession } from '..';
 
-export default async function sendVerifyCode(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
+async function sendVerifyCode(req: NextApiRequest, res: NextApiResponse) {
+  const  session: ISession = req.session;
+
   const { to = '', templateId = '1' } = req.body;
 
   // http://doc.yuntongxun.com/pe/5a533de33b8496dd00dce07c 容联云短信开发
@@ -44,8 +46,23 @@ export default async function sendVerifyCode(
 
   console.log(response);
 
-  res.status(200).json({
-    code: 0,
-    data: 123,
-  });
+  const { statusCode, statusMsg, templateSMS } = response as any;
+  if (statusCode === '000000') {
+    session.verifyCode = verifyCode;
+    await session.save();
+    res.status(200).json({
+      code: 0,
+      msg: statusMsg,
+      data: {
+        templateSMS,
+      },
+    });
+  } else {
+    res.status(200).json({
+      code: statusCode,
+      msg: statusMsg,
+    });
+  }
 }
+
+export default withIronSessionApiRoute(sendVerifyCode, ironOptions);
