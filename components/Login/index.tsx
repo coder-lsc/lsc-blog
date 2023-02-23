@@ -29,7 +29,7 @@ const Login = ({ isShow, onClose }: IProp) => {
         to: form?.phone,
         templateId: 1,
       })
-      .then((res) => {
+      .then((res: any) => {
         console.log(res);
         if (res?.code === 0) {
           setIsShowVeriftyCode(true);
@@ -38,19 +38,31 @@ const Login = ({ isShow, onClose }: IProp) => {
         }
       });
   };
-  const clickLogin = () => {};
+  const clickLogin = () => {
+    request
+      .post('/api/user/login', {
+        phone: form.phone,
+        verify: form.verify,
+      })
+      .then((res: any) => {
+        if (res?.code === 0) {
+          onClose && onClose();
+        } else {
+          message.error(res?.msg || '未知错误');
+        }
+      });
+  };
   const handleOAuth = () => {};
   const handleCountEnd = () => {
     setIsShowVeriftyCode(false);
   };
-  const changePhone = (e: ChangeEvent<HTMLInputElement>) => {
+  const changeInput = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm({
       ...form,
       [name]: value,
     });
   };
-  const changeVerify = () => {};
 
   if (!isShow) return null;
   return (
@@ -67,14 +79,14 @@ const Login = ({ isShow, onClose }: IProp) => {
           placeholder="请输入手机号"
           className={styles.inputPhone}
           value={form.phone}
-          onChange={changePhone}
+          onChange={changeInput}
         />
         <div className={styles.verifyCodeArea}>
           <input
             name="verify"
             placeholder="请输入验证码"
             value={form.verify}
-            onChange={changeVerify}
+            onChange={changeInput}
           />
           <span className={styles.verify} onClick={getVerifyCode}>
             {isShowVerifyCode ? (

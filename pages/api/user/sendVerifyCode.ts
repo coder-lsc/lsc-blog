@@ -1,14 +1,14 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+import { withIronSessionApiRoute } from 'iron-session/next';
 import { format } from 'date-fns';
 import { encode } from 'js-base64';
 import md5 from 'md5';
-import { NextApiRequest, NextApiResponse } from 'next';
 import request from 'service/fetch';
-import { withIronSessionApiRoute } from 'iron-session/next';
 import { ironOptions } from 'config/index';
 import { ISession } from '..';
 
 async function sendVerifyCode(req: NextApiRequest, res: NextApiResponse) {
-  const  session: ISession = req.session;
+  const session: ISession = req.session;
 
   const { to = '', templateId = '1' } = req.body;
 
@@ -44,7 +44,7 @@ async function sendVerifyCode(req: NextApiRequest, res: NextApiResponse) {
     },
   );
 
-  console.log(response);
+  console.log('容联云短信服务响应体：', response);
 
   const { statusCode, statusMsg, templateSMS } = response as any;
   if (statusCode === '000000') {
