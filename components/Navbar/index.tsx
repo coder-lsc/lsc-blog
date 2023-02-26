@@ -7,7 +7,9 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useStore } from 'store';
 import { navs } from './config';
+import request from 'service/fetch';
 import styles from './index.module.scss';
+import { observer } from 'mobx-react-lite';
 
 const Navbar: NextPage = () => {
   const store = useStore();
@@ -23,6 +25,16 @@ const Navbar: NextPage = () => {
     setIsShowLogin(true);
   };
 
+  const handleLogout = () => {
+    request.post('/api/user/logout').then((res: any) => {
+      if (res?.code === 0) {
+        store.user.setUserInfo({});
+      }
+    });
+  };
+
+  const goToPersonalPage = () => {};
+
   const handleClose = () => {
     setIsShowLogin(false);
   };
@@ -30,11 +42,11 @@ const Navbar: NextPage = () => {
   const renderDropDownMenu = () => {
     return (
       <Menu>
-        <Menu.Item>
+        <Menu.Item onClick={goToPersonalPage}>
           <HomeOutlined />
           &nbsp; 个人主页
         </Menu.Item>
-        <Menu.Item>
+        <Menu.Item onClick={handleLogout}>
           <LoginOutlined />
           &nbsp; 退出登录
         </Menu.Item>
@@ -73,4 +85,4 @@ const Navbar: NextPage = () => {
   );
 };
 
-export default Navbar;
+export default observer(Navbar);

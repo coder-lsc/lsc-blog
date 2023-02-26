@@ -7,13 +7,15 @@ interface IProps {
   children: ReactElement;
 }
 
-enableStaticRendering(true);
+enableStaticRendering(!process.browser);
 
 const StoreContext = createContext({});
 
 export const StoreProvider = ({ initValue, children }: IProps) => {
   const store: IStore = useLocalObservable(createStore(initValue));
-  return <StoreContext.Provider value={store}>{children}</StoreContext.Provider>;
+  return (
+    <StoreContext.Provider value={store}>{children}</StoreContext.Provider>
+  );
 };
 
 export const useStore = () => {

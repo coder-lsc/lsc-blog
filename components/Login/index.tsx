@@ -4,6 +4,7 @@ import { ChangeEvent, useState } from 'react';
 import styles from './index.module.scss';
 import request from 'service/fetch';
 import { useStore } from 'store';
+import { observer } from 'mobx-react-lite';
 
 interface IProp {
   isShow: boolean;
@@ -115,4 +116,4 @@ const Login = ({ isShow, onClose }: IProp) => {
   );
 };
 
-export default Login;
+export default observer(Login);

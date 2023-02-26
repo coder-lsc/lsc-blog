@@ -4,6 +4,8 @@ import { ironOptions } from 'config';
 import { prepareConnection } from 'db';
 import { User, UserAuth } from 'db/entity/index';
 import { ISession } from '..';
+import { Cookie } from 'next-cookie';
+import { setCookie } from 'utils';
 
 async function login(req: NextApiRequest, res: NextApiResponse) {
   const session: ISession = req.session;
@@ -56,6 +58,14 @@ async function login(req: NextApiRequest, res: NextApiResponse) {
       console.log(resUserAuth);
     }
     await session.save();
+
+    const cookies = Cookie.fromApiRoute(req, res);
+    setCookie(cookies, {
+      userId: session.id,
+      nickname: session.nickname,
+      avatar: session.avatar,
+    });
+
     res?.status(200).json({
       code: 0,
       msg: '登录成功',
