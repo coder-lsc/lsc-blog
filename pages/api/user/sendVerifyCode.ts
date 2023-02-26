@@ -45,6 +45,7 @@ async function sendVerifyCode(req: NextApiRequest, res: NextApiResponse) {
   );
 
   console.log('容联云短信服务响应体：', response);
+  console.log('验证码是：', verifyCode);
 
   const { statusCode, statusMsg, templateSMS } = response as any;
   if (statusCode === '000000') {

@@ -3,6 +3,7 @@ import CountDown from 'components/CountDown';
 import { ChangeEvent, useState } from 'react';
 import styles from './index.module.scss';
 import request from 'service/fetch';
+import { useStore } from 'store';
 
 interface IProp {
   isShow: boolean;
@@ -10,6 +11,9 @@ interface IProp {
 }
 
 const Login = ({ isShow, onClose }: IProp) => {
+  const store = useStore();
+  console.log(store, '000');
+
   const [form, setForm] = useState({
     phone: '',
     verify: '',
@@ -47,6 +51,8 @@ const Login = ({ isShow, onClose }: IProp) => {
       })
       .then((res: any) => {
         if (res?.code === 0) {
+          // 登录成功
+          store.user.setUserInfo(res?.data);
           onClose && onClose();
         } else {
           message.error(res?.msg || '未知错误');
