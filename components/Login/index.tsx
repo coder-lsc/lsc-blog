@@ -43,6 +43,7 @@ const Login = ({ isShow, onClose }: IProp) => {
       .post('/api/user/login', {
         phone: form.phone,
         verify: form.verify,
+        indentity_type: 'phone',
       })
       .then((res: any) => {
         if (res?.code === 0) {

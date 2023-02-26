@@ -26,5 +26,5 @@ export class UserAuth extends BaseEntity {
   identifier!: string;
 
   @Column()
-  introduce!: string;
+  credential!: string;
 }

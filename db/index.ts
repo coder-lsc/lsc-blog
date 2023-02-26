@@ -17,7 +17,7 @@ export const prepareConnection = () => {
         const staleConnection = getConnection();
         await staleConnection.close();
       } catch (err) {
-        console.log(err);
+        console.log(err, 'db/entity/index/20行 数据库连接错误');
       }
 
       const connection = await createConnection({
