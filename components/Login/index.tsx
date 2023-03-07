@@ -60,7 +60,13 @@ const Login = ({ isShow, onClose }: IProp) => {
         }
       });
   };
-  const handleOAuth = () => {};
+  const handleOAuth = () => {
+    const githubClientID = '50e3021212a722363f00';
+    const redirectUri = 'http://localhost:3000/api/oauth/redirect';
+    window.open(
+      `https://github.com/login/oauth/authorize?client_id=${githubClientID}&redirect_uri=${redirectUri}`,
+    );
+  };
   const handleCountEnd = () => {
     setIsShowVeriftyCode(false);
   };
